@@ -1,6 +1,7 @@
 ﻿using System.IO.Pipelines;
 
 List<string> toDoList = new List<string>();
+//int maxTasks;
 
 bool validEntry = false;
 string? readResult;
@@ -14,7 +15,10 @@ do
 
         Console.WriteLine("1. Enter new task");
         Console.WriteLine("2. Check current tasks");
+        Console.WriteLine("3. Complete a task");
         Console.WriteLine("Exit");
+
+        //maxTasks = toDoList.Count;
 
 
         readResult = Console.ReadLine();
@@ -28,9 +32,12 @@ do
                     NewTask();
                     validEntry = true;
                     break;
-
                 case "2":
                     CurrentTasks();
+                    validEntry = true;
+                    break;
+                case "3":
+                    CompleteTask();
                     validEntry = true;
                     break;
                 case "exit":
@@ -54,8 +61,16 @@ do
 
         if (newTask != null)
         {
-            newTask = newTask.ToLower();
-            toDoList.Add(newTask);
+            if (newTask != "")
+            {
+                newTask = newTask.ToLower();
+                toDoList.Add(newTask);
+            }
+            else
+            {
+                Console.WriteLine("Invalid task name");
+            }
+
         }
 
         Console.WriteLine("Press enter to return to the menu");
@@ -70,10 +85,52 @@ do
             Console.WriteLine(task);
         }
 
-
         Console.WriteLine("Press enter to return to the menu");
         Console.ReadLine();
     }
 
+    void CompleteTask()
+    {
+        for (int i = 0; i < toDoList.Count; i++)
+        {
+            Console.WriteLine($"Task {i}: {toDoList[i]}\n");
+        }
+        Console.WriteLine("Please enter the number of the task you wish to complete");
+
+        //int positiveValue;
+        int j;
+        string? userInput = Console.ReadLine();
+        bool validInput = int.TryParse(userInput, out j); // --> out positiveValue);
+        //int j = Math.Abs(positiveValue);
+
+
+        //Console.WriteLine(validInput);
+        //Console.WriteLine(j);
+        
+        if ((j < toDoList.Count) && (j >= 0))
+        {
+            Console.WriteLine($"The task {toDoList[j]} has been removed");
+            toDoList.RemoveAt(j);
+        }
+        else if (j > toDoList.Count)
+        {
+            Console.WriteLine("Please select a valid task");
+        }
+        else
+        {
+            Console.WriteLine("Invalid selection");
+        }
+
+
+        /* for (int i = 0; i < toDoList.Count; i++)
+        {
+            switch (j)
+            {
+                case i:
+                    break;
+            }
+        } */
+
+    }
 
 } while (readResult != "exit");
